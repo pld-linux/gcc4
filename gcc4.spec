@@ -15,18 +15,12 @@ Summary(pt_BR):	Coleção dos compiladores GNU: o compilador C e arquivos comparti
 %define	sname	gcc
 Name:		%{sname}4
 Version:	4.1.1
-#define		_snap	20060515r113785
-#define		_snap	20060517
-#Release:	0.%{_snap}.1
 Release:	1
 Epoch:		5
 License:	GPL v2+
 Group:		Development/Languages
-#Source0:	ftp://gcc.gnu.org/pub/gcc/prerelease-%{version}-%{_snap}/gcc-%{version}-%{_snap}.tar.bz2
 Source0:	ftp://gcc.gnu.org/pub/gcc/releases/gcc-%{version}/%{sname}-%{version}.tar.bz2
 # Source0-md5:	ad9f97a4d04982ccf4fd67cb464879f3
-#Source0:	ftp://gcc.gnu.org/pub/gcc/snapshots/4.1-%{_snap}/gcc-4.1-%{_snap}.tar.bz2
-#Source0:	gcc-4.1-%{_snap}.tar.bz2
 Source1:	%{name}-optimize-la.pl
 Patch0:		%{name}-info.patch
 Patch1:		%{name}-nolocalefiles.patch
@@ -68,12 +62,12 @@ BuildRequires:	automake
 # binutils 2.16.91 or newer are required for compiling medium model now
 BuildRequires:	binutils >= 2:2.16.91.0.1
 BuildRequires:	bison
-BuildRequires:	chrpath >= 0.13-2
+BuildRequires:	chrpath >= 0.10
 %{?with_tests:BuildRequires:	dejagnu}
 BuildRequires:	fileutils >= 4.0.41
 BuildRequires:	flex
 BuildRequires:	gettext-devel
-BuildRequires:	glibc-devel >= 6:2.4-1
+BuildRequires:	glibc-devel >= 6:2.3
 BuildRequires:	perl-base
 BuildRequires:	rpmbuild(macros) >= 1.211
 BuildRequires:	texinfo >= 4.1
@@ -82,15 +76,8 @@ BuildRequires:	zlib-devel
 # http://sources.redhat.com/ml/glibc-cvs/2005-q1/msg00614.html
 # http://sources.redhat.com/ml/binutils/2005-01/msg00288.html
 Requires:	binutils >= 2:2.16.90.0.1-0.3
-Requires:	libgcc = %{epoch}:%{version}-%{release}
-Provides:	cpp = %{epoch}:%{version}-%{release}
-Obsoletes:	cpp
-Obsoletes:	egcs-cpp
-Obsoletes:	gcc-chill
-Obsoletes:	gcc-cpp
-Obsoletes:	gcc-ksi
-Obsoletes:	gont
-Conflicts:	glibc-devel < 2.2.5-20
+Requires:	libgcc4 = %{epoch}:%{version}-%{release}
+Provides:	cpp4 = %{epoch}:%{version}-%{release}
 BuildRoot:	%{tmpdir}/%{sname}-%{version}-root-%(id -u -n)
 
 %define		_slibdir	/%{_lib}
@@ -132,7 +119,6 @@ Summary(pl):	Biblioteka gcc
 Summary(pt_BR):	Biblioteca runtime para o GCC
 License:	GPL with unlimited link permission
 Group:		Libraries
-Obsoletes:	libgcc1
 
 %description -n libgcc4
 Shared gcc library.
@@ -205,6 +191,7 @@ CFLAGS="%{rpmcflags}" \
 CXXFLAGS="%{rpmcxxflags}" \
 TEXCONFIG=false \
 ../configure \
+	--program-suffix="4" \
 	--prefix=%{_prefix} \
 	--with-local-prefix=%{_prefix}/local \
 	--libdir=%{_libdir} \
@@ -264,13 +251,13 @@ cd builddir
 install gcc/specs $RPM_BUILD_ROOT%{_libdir}/gcc/%{_target_platform}/%{version}
 
 %ifarch sparc64
-ln -sf	%{_bindir}/sparc64-pld-linux-gcc \
-	$RPM_BUILD_ROOT%{_bindir}/sparc-pld-linux-gcc
+ln -sf	%{_bindir}/sparc64-pld-linux-gcc4 \
+	$RPM_BUILD_ROOT%{_bindir}/sparc-pld-linux-gcc4
 %endif
 
-ln -sf %{_bindir}/cpp $RPM_BUILD_ROOT/lib/cpp
-ln -sf gcc $RPM_BUILD_ROOT%{_bindir}/cc
-echo ".so gcc.1" > $RPM_BUILD_ROOT%{_mandir}/man1/cc.1
+ln -sf %{_bindir}/cpp4 $RPM_BUILD_ROOT/lib/cpp4
+ln -sf gcc4 $RPM_BUILD_ROOT%{_bindir}/cc4
+echo ".so gcc4.1" > $RPM_BUILD_ROOT%{_mandir}/man1/cc4.1
 
 libssp=$(cd $RPM_BUILD_ROOT%{_libdir}; echo libssp.so.*.*.*)
 mv $RPM_BUILD_ROOT{%{_libdir}/$libssp,%{_slibdir}}
@@ -314,7 +301,7 @@ rm -rf $RPM_BUILD_ROOT
 %post	-p /sbin/ldconfig -n libgcc4
 %postun	-p /sbin/ldconfig -n libgcc4
 
-%files -f gcc.lang
+%files
 %defattr(644,root,root,755)
 %doc ChangeLog.general MAINTAINERS NEWS
 # bugs.html faq.html
@@ -326,21 +313,18 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_libdir}/gcc/*/*/include/ssp
 
 %attr(755,root,root) %{_bindir}/*-gcc*
-%attr(755,root,root) %{_bindir}/gcc
-%attr(755,root,root) %{_bindir}/gccbug
-%attr(755,root,root) %{_bindir}/gcov
-%attr(755,root,root) %{_bindir}/cc
-%attr(755,root,root) %{_bindir}/cpp
+%attr(755,root,root) %{_bindir}/gcc4
+%attr(755,root,root) %{_bindir}/gccbug4
+%attr(755,root,root) %{_bindir}/gcov4
+%attr(755,root,root) %{_bindir}/cc4
+%attr(755,root,root) %{_bindir}/cpp4
 
-%{_mandir}/man1/cc.1*
-%{_mandir}/man1/cpp.1*
-%{_mandir}/man1/gcc.1*
-%{_mandir}/man1/gcov.1*
+%{_mandir}/man1/cc4.1*
+%{_mandir}/man1/cpp4.1*
+%{_mandir}/man1/gcc4.1*
+%{_mandir}/man1/gcov4.1*
 
-%{_infodir}/cpp*
-%{_infodir}/gcc*
-
-%attr(755,root,root) /lib/cpp
+%attr(755,root,root) /lib/cpp4
 
 %attr(755,root,root) %{_slibdir}/lib*.so
 %{_libdir}/libssp.a
