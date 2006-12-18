@@ -221,6 +221,7 @@ TEXCONFIG=false \
 %ifarch ppc ppc64
 	--enable-secureplt \
 %endif
+	--disable-multilib \
 	%{_target_platform}
 
 cd ..
