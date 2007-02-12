@@ -9,9 +9,9 @@
 %endif
 
 Summary:	GNU Compiler Collection: the C compiler and shared files
-Summary(es):	Colección de compiladores GNU: el compilador C y ficheros compartidos
-Summary(pl):	Kolekcja kompilatorów GNU: kompilator C i pliki wspó³dzielone
-Summary(pt_BR):	Coleção dos compiladores GNU: o compilador C e arquivos compartilhados
+Summary(es.UTF-8):   ColecciÃ³n de compiladores GNU: el compilador C y ficheros compartidos
+Summary(pl.UTF-8):   Kolekcja kompilatorÃ³w GNU: kompilator C i pliki wspÃ³Å‚dzielone
+Summary(pt_BR.UTF-8):   ColeÃ§Ã£o dos compiladores GNU: o compilador C e arquivos compartilhados
 %define	sname	gcc
 Name:		%{sname}4
 Version:	4.1.1
@@ -90,46 +90,46 @@ This package contains the C compiler and some files shared by various
 parts of the GNU Compiler Collection. In order to use another GCC
 compiler you will need to install the appropriate subpackage.
 
-%description -l es
+%description -l es.UTF-8
 Un compilador que intenta integrar todas las optimalizaciones y
-características necesarias para un entorno de desarrollo eficaz y
+caracterÃ­sticas necesarias para un entorno de desarrollo eficaz y
 estable.
 
 Este paquete contiene el compilador de C y unos ficheros compartidos
-por varias partes de la colección de compiladores GNU (GCC). Para usar
-otro compilador de GCC será necesario que instale el subpaquete
+por varias partes de la colecciÃ³n de compiladores GNU (GCC). Para usar
+otro compilador de GCC serÃ¡ necesario que instale el subpaquete
 adecuado.
 
-%description -l pl
-Kompilator, posiadaj±cy du¿e mo¿liwo¶ci optymalizacyjne niezbêdne do
+%description -l pl.UTF-8
+Kompilator, posiadajÄ…cy duÅ¼e moÅ¼liwoÅ›ci optymalizacyjne niezbÄ™dne do
 wyprodukowania szybkiego i stabilnego kodu wynikowego.
 
-Ten pakiet zawiera kompilator C i pliki wspó³dzielone przez ró¿ne
-czê¶ci kolekcji kompilatorów GNU (GCC). ¯eby u¿ywaæ innego kompilatora
-z GCC, trzeba zainstalowaæ odpowiedni podpakiet.
+Ten pakiet zawiera kompilator C i pliki wspÃ³Å‚dzielone przez rÃ³Å¼ne
+czÄ™Å›ci kolekcji kompilatorÃ³w GNU (GCC). Å»eby uÅ¼ywaÄ‡ innego kompilatora
+z GCC, trzeba zainstalowaÄ‡ odpowiedni podpakiet.
 
-%description -l pt_BR
-Este pacote adiciona infraestrutura básica e suporte a linguagem C ao
+%description -l pt_BR.UTF-8
+Este pacote adiciona infraestrutura bÃ¡sica e suporte a linguagem C ao
 GNU Compiler Collection.
 
 %package -n libgcc4
 Summary:	Shared gcc library
-Summary(es):	Biblioteca compartida de gcc
-Summary(pl):	Biblioteka gcc
-Summary(pt_BR):	Biblioteca runtime para o GCC
+Summary(es.UTF-8):   Biblioteca compartida de gcc
+Summary(pl.UTF-8):   Biblioteka gcc
+Summary(pt_BR.UTF-8):   Biblioteca runtime para o GCC
 License:	GPL with unlimited link permission
 Group:		Libraries
 
 %description -n libgcc4
 Shared gcc library.
 
-%description -n libgcc4 -l es
+%description -n libgcc4 -l es.UTF-8
 Biblioteca compartida de gcc.
 
-%description -n libgcc4 -l pl
+%description -n libgcc4 -l pl.UTF-8
 Biblioteka dynamiczna gcc.
 
-%description -n libgcc4 -l pt_BR
+%description -n libgcc4 -l pt_BR.UTF-8
 Biblioteca runtime para o GCC.
 
 %prep
