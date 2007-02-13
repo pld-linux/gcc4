@@ -9,9 +9,9 @@
 %endif
 
 Summary:	GNU Compiler Collection: the C compiler and shared files
-Summary(es.UTF-8):   Colección de compiladores GNU: el compilador C y ficheros compartidos
-Summary(pl.UTF-8):   Kolekcja kompilatorów GNU: kompilator C i pliki współdzielone
-Summary(pt_BR.UTF-8):   Coleção dos compiladores GNU: o compilador C e arquivos compartilhados
+Summary(es.UTF-8):	Colección de compiladores GNU: el compilador C y ficheros compartidos
+Summary(pl.UTF-8):	Kolekcja kompilatorów GNU: kompilator C i pliki współdzielone
+Summary(pt_BR.UTF-8):	Coleção dos compiladores GNU: o compilador C e arquivos compartilhados
 %define	sname	gcc
 Name:		%{sname}4
 Version:	4.1.1
@@ -114,9 +114,9 @@ GNU Compiler Collection.
 
 %package -n libgcc4
 Summary:	Shared gcc library
-Summary(es.UTF-8):   Biblioteca compartida de gcc
-Summary(pl.UTF-8):   Biblioteka gcc
-Summary(pt_BR.UTF-8):   Biblioteca runtime para o GCC
+Summary(es.UTF-8):	Biblioteca compartida de gcc
+Summary(pl.UTF-8):	Biblioteka gcc
+Summary(pt_BR.UTF-8):	Biblioteca runtime para o GCC
 License:	GPL with unlimited link permission
 Group:		Libraries
 
