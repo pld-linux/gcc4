@@ -2,6 +2,7 @@
 # Conditional build:
 %bcond_with	profiling	# build with profiling
 %bcond_without	bootstrap	# omit 3-stage bootstrap
+%bcond_without	cxx		# build without C++ support
 %bcond_with	tests		# torture gcc
 
 %if %{without bootstrap}
@@ -132,6 +133,149 @@ Biblioteka dynamiczna gcc.
 %description -n libgcc4 -l pt_BR
 Biblioteca runtime para o GCC.
 
+%package c++
+Summary:	C++ support for gcc
+Summary(es):	Soporte de C++ para gcc
+Summary(pl):	Obs³uga C++ dla gcc
+Summary(pt_BR):	Suporte C++ para o gcc
+Group:		Development/Languages
+Requires:	%{name} = %{epoch}:%{version}-%{release}
+Obsoletes:	egcc-c++
+Obsoletes:	egcs-c++
+
+%description c++
+This package adds C++ support to the GNU Compiler Collection. It
+includes support for most of the current C++ specification, including
+templates and exception handling. It does not include a standard C++
+library, which is available separately.
+
+%description c++ -l de
+Dieses Paket enthält die C++-Unterstützung für den
+GNU-Compiler-Collection. Es unterstützt die aktuelle
+C++-Spezifikation, inkl. Templates und Ausnahmeverarbeitung. Eine
+C++-Standard-Library ist nicht enthalten - sie ist getrennt
+erhältlich.
+
+%description c++ -l es
+Este paquete añade soporte de C++ al GCC (colección de compiladores
+GNU). Ello incluye el soporte para la mayoría de la especificación
+actual de C++, incluyendo plantillas y manejo de excepciones. No
+incluye la biblioteca estándar de C++, la que es disponible separada.
+
+%description c++ -l fr
+Ce package ajoute un support C++ a la collection de compilateurs GNU.
+Il comprend un support pour la plupart des spécifications actuelles de
+C++, dont les modéles et la gestion des exceptions. Il ne comprend pas
+une bibliothéque C++ standard, qui est disponible séparément.
+
+%description c++ -l pl
+Ten pakiet dodaje obs³ugê C++ do kompilatora gcc. Ma wsparcie dla
+du¿ej ilo¶ci obecnych specyfikacji C++, nie zawiera natomiast
+standardowych bibliotek C++, które s± w oddzielnym pakiecie.
+
+%description c++ -l pt_BR
+Este pacote adiciona suporte C++ para o gcc.
+
+%description c++ -l tr
+Bu paket, GNU C derleyicisine C++ desteði ekler. 'Template'ler ve
+aykýrý durum iþleme gibi çoðu güncel C++ tanýmlarýna uyar. Standart
+C++ kitaplýðý bu pakette yer almaz.
+
+%package -n libstdc++
+Summary:	GNU C++ library
+Summary(es):	Biblioteca C++ de GNU
+Summary(pl):	Biblioteki GNU C++
+Summary(pt_BR):	Biblioteca C++ GNU
+License:	GPL v2+ with free software exception
+Group:		Libraries
+Obsoletes:	libg++
+Obsoletes:	libstdc++3
+
+%description -n libstdc++
+This is the GNU implementation of the standard C++ libraries, along
+with additional GNU tools. This package includes the shared libraries
+necessary to run C++ applications.
+
+%description -n libstdc++ -l de
+Dies ist die GNU-Implementierung der Standard-C++-Libraries mit
+weiteren GNU-Tools. Dieses Paket enthält die zum Ausführen von
+C++-Anwendungen erforderlichen gemeinsam genutzten Libraries.
+
+%description -n libstdc++ -l es
+Este es el soporte de las bibliotecas padrón del C++, junto con
+herramientas GNU adicionales. El paquete incluye las bibliotecas
+compartidas necesarias para ejecutar aplicaciones C++.
+
+%description -n libstdc++ -l fr
+Ceci est l'implémentation GNU des librairies C++ standard, ainsi que
+des outils GNU supplémentaires. Ce package comprend les librairies
+partagées nécessaires à l'exécution d'application C++.
+
+%description -n libstdc++ -l pl
+Pakiet ten zawiera biblioteki bêd±ce implementacj± standardowych
+bibliotek C++. Znajduj± siê w nim biblioteki dynamiczne niezbêdne do
+uruchomienia aplikacji napisanych w C++.
+
+%description -n libstdc++ -l pt_BR
+Este pacote é uma implementação da biblioteca padrão C++ v3, um
+subconjunto do padrão ISO 14882.
+
+%description -n libstdc++ -l tr
+Bu paket, standart C++ kitaplýklarýnýn GNU gerçeklemesidir ve C++
+uygulamalarýnýn koþturulmasý için gerekli kitaplýklarý içerir.
+
+%package -n libstdc++-devel
+Summary:	Header files and documentation for C++ development
+Summary(de):	Header-Dateien zur Entwicklung mit C++
+Summary(es):	Ficheros de cabecera y documentación para desarrollo C++
+Summary(fr):	Fichiers d'en-tête et biblitothèques pour développer en C++
+Summary(pl):	Pliki nag³ówkowe i dokumentacja do biblioteki standardowej C++
+Summary(pt_BR):	Arquivos de inclusão e bibliotecas para o desenvolvimento em C++
+Summary(tr):	C++ ile program geliþtirmek için gerekli dosyalar
+License:	GPL v2+ with free software exception
+Group:		Development/Libraries
+Requires:	%{name}-c++ = %{epoch}:%{version}-%{release}
+Requires:	libstdc++ = %{epoch}:%{version}-%{release}
+Requires:	glibc-devel
+Obsoletes:	libg++-devel
+Obsoletes:	libstdc++3-devel
+
+%description -n libstdc++-devel
+This is the GNU implementation of the standard C++ libraries. This
+package includes the header files needed for C++ development and
+library documentation.
+
+%description -n libstdc++-devel -l es
+Este es el soporte de las bibliotecas padrón del lenguaje C++. Este
+paquete incluye los archivos de inclusión y bibliotecas necesarios
+para desarrollo de programas en lenguaje C++.
+
+%description -n libstdc++-devel -l pl
+Pakiet ten zawiera biblioteki bêd±ce implementacj± standardowych
+bibliotek C++. Znajduj± siê w nim pliki nag³ówkowe wykorzystywane przy
+programowaniu w jêzyku C++ oraz dokumentacja biblioteki standardowej.
+
+%description -n libstdc++-devel -l pt_BR
+Este pacote inclui os arquivos de inclusão e bibliotecas necessárias
+para desenvolvimento de programas C++.
+
+%package -n libstdc++-static
+Summary:	Static C++ standard library
+Summary(es):	Biblioteca estándar estática de C++
+Summary(pl):	Statyczna biblioteka standardowa C++
+License:	GPL v2+ with free software exception
+Group:		Development/Libraries
+Requires:	libstdc++-devel = %{epoch}:%{version}-%{release}
+
+%description -n libstdc++-static
+Static C++ standard library.
+
+%description -n libstdc++-static -l es
+Biblioteca estándar estática de C++.
+
+%description -n libstdc++-static -l pl
+Statyczna biblioteka standardowa C++.
+
 %prep
 %setup -q -n gcc-%{version}
 
@@ -222,6 +366,12 @@ TEXCONFIG=false \
 	--enable-secureplt \
 %endif
 	--disable-multilib \
+%if %{with cxx}
+	--with-gxx-include-dir=%{_includedir}/c++/%{version} \
+	--disable-libstdcxx-pch \
+	--enable-__cxa_atexit \
+	--enable-libstdcxx-allocator=new \
+%endif
 	%{_target_platform}
 
 cd ..
@@ -283,6 +433,11 @@ rm -rf $gccdir/install-tools
 %find_lang gcc
 %find_lang cpplib
 cat cpplib.lang >> gcc.lang
+
+%if %{with cxx}
+%find_lang libstdc\+\+
+install libstdc++-v3/include/stdc++.h $RPM_BUILD_ROOT%{_includedir}
+%endif
 
 # cvs snap doesn't contain (release does) below files,
 # so let's create dummy entries to satisfy %%files.
@@ -347,3 +502,55 @@ rm -rf $RPM_BUILD_ROOT
 %files -n libgcc4
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_slibdir}/lib*.so.*
+
+%if %{with cxx}
+%files c++
+%defattr(644,root,root,755)
+%doc gcc/cp/{ChangeLog,NEWS}
+%attr(755,root,root) %{_bindir}/g++
+%attr(755,root,root) %{_bindir}/*-g++
+%attr(755,root,root) %{_bindir}/c++
+%attr(755,root,root) %{_bindir}/*-c++
+%attr(755,root,root) %{_libdir}/gcc/*/*/cc1plus
+%if %{with multilib}
+%{_libdir32}/libsupc++.a
+%{_libdir32}/libsupc++.la
+%endif
+%{_libdir}/libsupc++.a
+%{_libdir}/libsupc++.la
+%{_mandir}/man1/g++.1*
+
+%files -n libstdc++ -f libstdc++.lang
+%defattr(644,root,root,755)
+%doc libstdc++-v3/{ChangeLog,README}
+%if %{with multilib}
+%attr(755,root,root) %{_libdir32}/libstdc++.so.*.*.*
+%endif
+%attr(755,root,root) %{_libdir}/libstdc++.so.*.*.*
+
+%files -n libstdc++-devel
+%defattr(644,root,root,755)
+%doc libstdc++-v3/docs/html
+%dir %{_includedir}/c++
+%{_includedir}/stdc++.h
+%{_includedir}/c++/%{version}
+%if %{with java}
+%exclude %{_includedir}/c++/%{version}/java
+%exclude %{_includedir}/c++/%{version}/javax
+%exclude %{_includedir}/c++/%{version}/gcj
+%exclude %{_includedir}/c++/%{version}/gnu
+%endif
+%if %{with multilib}
+%{_libdir32}/libstdc++.la
+%attr(755,root,root) %{_libdir32}/libstdc++.so
+%endif
+%{_libdir}/libstdc++.la
+%attr(755,root,root) %{_libdir}/libstdc++.so
+
+%files -n libstdc++-static
+%defattr(644,root,root,755)
+%if %{with multilib}
+%{_libdir32}/libstdc++.a
+%endif
+%{_libdir}/libstdc++.a
+%endif
