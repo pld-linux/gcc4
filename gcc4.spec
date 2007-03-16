@@ -82,6 +82,7 @@ Requires:	binutils >= 2:2.16.90.0.1-0.3
 Requires:	libgcc4 = %{epoch}:%{version}-%{release}
 Provides:	cpp = %{epoch}:%{version}-%{release}
 Provides:	cpp4 = %{epoch}:%{version}-%{release}
+Provides:	gcc = %{epoch}:%{version}-%{release}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_slibdir	/%{_lib}
@@ -240,7 +241,7 @@ Summary(pt_BR):	Arquivos de inclusão e bibliotecas para o desenvolvimento em C++
 Summary(tr):	C++ ile program geliþtirmek için gerekli dosyalar
 License:	GPL v2+ with free software exception
 Group:		Development/Libraries
-Requires:	%{name}-c++4 = %{epoch}:%{version}-%{release}
+Requires:	%{name}-c++ = %{epoch}:%{version}-%{release}
 Requires:	glibc-devel
 Requires:	libstdc++4 = %{epoch}:%{version}-%{release}
 Provides:	libstdc++-devel = %{epoch}:%{version}-%{release}
