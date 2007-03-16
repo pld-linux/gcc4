@@ -79,7 +79,6 @@ BuildRequires:	zlib-devel
 # http://sources.redhat.com/ml/glibc-cvs/2005-q1/msg00614.html
 # http://sources.redhat.com/ml/binutils/2005-01/msg00288.html
 Requires:	binutils >= 2:2.16.90.0.1-0.3
-Requires:	libgcc = %{epoch}:%{version}-%{release}
 Requires:	libgcc4 = %{epoch}:%{version}-%{release}
 Provides:	cpp = %{epoch}:%{version}-%{release}
 Provides:	cpp4 = %{epoch}:%{version}-%{release}
