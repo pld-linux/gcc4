@@ -26,9 +26,6 @@ Source1:	%{name}-optimize-la.pl
 Patch0:		%{name}-info.patch
 Patch1:		%{name}-nolocalefiles.patch
 Patch2:		%{name}-nodebug.patch
-Patch3:		%{name}-ada-link.patch
-Patch4:		%{name}-sparc64-ada_fix.patch
-Patch5:		%{name}-alpha-ada_fix.patch
 # -fvisibility fixes...
 Patch6:		%{name}-pr19664_gnu_internal.patch
 Patch7:		%{name}-pr19664_libstdc++.patch
@@ -48,9 +45,7 @@ Patch21:	%{name}-pr13676.patch
 Patch22:	%{name}-pr25626.patch
 Patch23:	%{name}-libstdcxx-bitset.patch
 
-Patch25:	%{name}-libjava-multilib.patch
 Patch26:	%{name}-ppc64-m32-m64-multilib-only.patch
-Patch27:	%{name}-enable-java-awt-qt.patch
 
 # 128-bit long double support for glibc 2.4
 Patch30:	%{name}-ldbl-default-libstdc++.patch
@@ -73,6 +68,7 @@ BuildRequires:	perl-base
 BuildRequires:	rpmbuild(macros) >= 1.211
 BuildRequires:	texinfo >= 4.1
 BuildRequires:	zlib-devel
+BuildRequires:	gmp-devel
 # AS_NEEDED directive for dynamic linker
 # http://sources.redhat.com/ml/glibc-cvs/2005-q1/msg00614.html
 # http://sources.redhat.com/ml/binutils/2005-01/msg00288.html
@@ -282,9 +278,6 @@ Statyczna biblioteka standardowa C++.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
 
 # -fvisbility fixes...
 %patch6 -p1
@@ -305,9 +298,7 @@ Statyczna biblioteka standardowa C++.
 %patch22 -p1
 %patch23 -p1
 
-%patch25 -p1
 %patch26 -p1
-%patch27 -p1
 
 %patch30 -p0
 %patch31 -p0
@@ -322,11 +313,6 @@ mv ChangeLog ChangeLog.general
 cd gcc
 %{__autoconf}
 cd ..
-cd libjava
-%{__autoconf}
-cd classpath
-%{__autoconf}
-cd ../..
 cp -f /usr/share/automake/config.sub .
 
 rm -rf builddir && install -d builddir && cd builddir
@@ -345,7 +331,7 @@ TEXCONFIG=false \
 	--x-libraries=%{_libdir} \
 	--enable-shared \
 	--enable-threads=posix \
-	--enable-languages="c" \
+	--enable-languages="c%{?with_cxx:,c++}" \
 	--enable-c99 \
 	--enable-long-long \
 	--enable-nls \
@@ -435,15 +421,14 @@ rm -rf $gccdir/install-tools
 cat cpplib.lang >> gcc.lang
 
 %if %{with cxx}
-%find_lang libstdc\+\+
+# only de is installed and that is empty too
+#%%find_lang libstdc++
 install libstdc++-v3/include/stdc++.h $RPM_BUILD_ROOT%{_includedir}
 %endif
 
 # cvs snap doesn't contain (release does) below files,
 # so let's create dummy entries to satisfy %%files.
 [ ! -f NEWS ] && touch NEWS
-[ ! -f libgfortran/AUTHORS ] && touch libgfortran/AUTHORS
-[ ! -f libgfortran/README ] && touch libgfortran/README
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -507,25 +492,18 @@ rm -rf $RPM_BUILD_ROOT
 %files c++
 %defattr(644,root,root,755)
 %doc gcc/cp/{ChangeLog,NEWS}
-%attr(755,root,root) %{_bindir}/g++
-%attr(755,root,root) %{_bindir}/*-g++
-%attr(755,root,root) %{_bindir}/c++
-%attr(755,root,root) %{_bindir}/*-c++
+%attr(755,root,root) %{_bindir}/g++4
+%attr(755,root,root) %{_bindir}/*-g++4
+%attr(755,root,root) %{_bindir}/c++4
+%attr(755,root,root) %{_bindir}/*-c++4
 %attr(755,root,root) %{_libdir}/gcc/*/*/cc1plus
-%if %{with multilib}
-%{_libdir32}/libsupc++.a
-%{_libdir32}/libsupc++.la
-%endif
 %{_libdir}/libsupc++.a
 %{_libdir}/libsupc++.la
-%{_mandir}/man1/g++.1*
+%{_mandir}/man1/g++4.1*
 
 %files -n libstdc++ -f libstdc++.lang
 %defattr(644,root,root,755)
 %doc libstdc++-v3/{ChangeLog,README}
-%if %{with multilib}
-%attr(755,root,root) %{_libdir32}/libstdc++.so.*.*.*
-%endif
 %attr(755,root,root) %{_libdir}/libstdc++.so.*.*.*
 
 %files -n libstdc++-devel
@@ -534,23 +512,10 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_includedir}/c++
 %{_includedir}/stdc++.h
 %{_includedir}/c++/%{version}
-%if %{with java}
-%exclude %{_includedir}/c++/%{version}/java
-%exclude %{_includedir}/c++/%{version}/javax
-%exclude %{_includedir}/c++/%{version}/gcj
-%exclude %{_includedir}/c++/%{version}/gnu
-%endif
-%if %{with multilib}
-%{_libdir32}/libstdc++.la
-%attr(755,root,root) %{_libdir32}/libstdc++.so
-%endif
 %{_libdir}/libstdc++.la
 %attr(755,root,root) %{_libdir}/libstdc++.so
 
 %files -n libstdc++-static
 %defattr(644,root,root,755)
-%if %{with multilib}
-%{_libdir32}/libstdc++.a
-%endif
 %{_libdir}/libstdc++.a
 %endif
