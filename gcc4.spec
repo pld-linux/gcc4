@@ -15,11 +15,11 @@
 %undefine	with_profiling
 %endif
 
+%define	sname	gcc
 Summary:	GNU Compiler Collection: the C compiler and shared files
 Summary(es):	Colección de compiladores GNU: el compilador C y ficheros compartidos
 Summary(pl):	Kolekcja kompilatorów GNU: kompilator C i pliki wspó³dzielone
 Summary(pt_BR):	Coleção dos compiladores GNU: o compilador C e arquivos compartilhados
-%define	sname	gcc
 Name:		%{sname}4
 Version:	4.1.1
 Release:	1
@@ -70,18 +70,20 @@ BuildRequires:	fileutils >= 4.0.41
 BuildRequires:	flex
 BuildRequires:	gettext-devel
 BuildRequires:	glibc-devel >= 6:2.3
+BuildRequires:	gmp-devel
 BuildRequires:	perl-base
 BuildRequires:	rpmbuild(macros) >= 1.211
 BuildRequires:	texinfo >= 4.1
 BuildRequires:	zlib-devel
-BuildRequires:	gmp-devel
 # AS_NEEDED directive for dynamic linker
 # http://sources.redhat.com/ml/glibc-cvs/2005-q1/msg00614.html
 # http://sources.redhat.com/ml/binutils/2005-01/msg00288.html
 Requires:	binutils >= 2:2.16.90.0.1-0.3
+Requires:	libgcc = %{epoch}:%{version}-%{release}
 Requires:	libgcc4 = %{epoch}:%{version}-%{release}
+Provides:	cpp = %{epoch}:%{version}-%{release}
 Provides:	cpp4 = %{epoch}:%{version}-%{release}
-BuildRoot:	%{tmpdir}/%{sname}-%{version}-root-%(id -u -n)
+BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_slibdir	/%{_lib}
 
@@ -122,6 +124,7 @@ Summary(pl):	Biblioteka gcc
 Summary(pt_BR):	Biblioteca runtime para o GCC
 License:	GPL with unlimited link permission
 Group:		Libraries
+Provides:	libgcc = %{epoch}:%{version}-%{release}
 
 %description -n libgcc4
 Shared gcc library.
@@ -142,6 +145,7 @@ Summary(pl):	Obs³uga C++ dla gcc
 Summary(pt_BR):	Suporte C++ para o gcc
 Group:		Development/Languages
 Requires:	%{name} = %{epoch}:%{version}-%{release}
+Provides:	%{name}-c++ = %{epoch}:%{version}-%{release}
 Obsoletes:	egcc-c++
 Obsoletes:	egcs-c++
 
@@ -190,6 +194,7 @@ Summary(pl):	Biblioteki GNU C++
 Summary(pt_BR):	Biblioteca C++ GNU
 License:	GPL v2+ with free software exception
 Group:		Libraries
+Provides:	libstdc++ = %{epoch}:%{version}-%{release}
 Obsoletes:	libg++
 Obsoletes:	libstdc++3
 
@@ -237,8 +242,9 @@ Summary(tr):	C++ ile program geliþtirmek için gerekli dosyalar
 License:	GPL v2+ with free software exception
 Group:		Development/Libraries
 Requires:	%{name}-c++4 = %{epoch}:%{version}-%{release}
-Requires:	libstdc++4 = %{epoch}:%{version}-%{release}
 Requires:	glibc-devel
+Requires:	libstdc++4 = %{epoch}:%{version}-%{release}
+Provides:	libstdc++-devel = %{epoch}:%{version}-%{release}
 Obsoletes:	libg++-devel
 Obsoletes:	libstdc++3-devel
 
@@ -268,6 +274,7 @@ Summary(pl):	Statyczna biblioteka standardowa C++
 License:	GPL v2+ with free software exception
 Group:		Development/Libraries
 Requires:	libstdc++4-devel = %{epoch}:%{version}-%{release}
+Provides:	libstdc++-static = %{epoch}:%{version}-%{release}
 
 %description -n libstdc++4-static
 Static C++ standard library.
