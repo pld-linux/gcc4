@@ -1,3 +1,9 @@
+# TODO
+# - gcc4-c++ collides with gcc-c++:
+#   %{_libdir}/libsupc++.a
+#   %{_libdir}/libsupc++.la
+# - libgcc4 collides with libgcc:
+#   /%{_lib}/libgcc_s.so.1
 #
 # Conditional build:
 %bcond_with	profiling	# build with profiling
@@ -177,7 +183,7 @@ Bu paket, GNU C derleyicisine C++ desteði ekler. 'Template'ler ve
 aykýrý durum iþleme gibi çoðu güncel C++ tanýmlarýna uyar. Standart
 C++ kitaplýðý bu pakette yer almaz.
 
-%package -n libstdc++
+%package -n libstdc++4
 Summary:	GNU C++ library
 Summary(es):	Biblioteca C++ de GNU
 Summary(pl):	Biblioteki GNU C++
@@ -187,40 +193,40 @@ Group:		Libraries
 Obsoletes:	libg++
 Obsoletes:	libstdc++3
 
-%description -n libstdc++
+%description -n libstdc++4
 This is the GNU implementation of the standard C++ libraries, along
 with additional GNU tools. This package includes the shared libraries
 necessary to run C++ applications.
 
-%description -n libstdc++ -l de
+%description -n libstdc++4 -l de
 Dies ist die GNU-Implementierung der Standard-C++-Libraries mit
 weiteren GNU-Tools. Dieses Paket enthält die zum Ausführen von
 C++-Anwendungen erforderlichen gemeinsam genutzten Libraries.
 
-%description -n libstdc++ -l es
+%description -n libstdc++4 -l es
 Este es el soporte de las bibliotecas padrón del C++, junto con
 herramientas GNU adicionales. El paquete incluye las bibliotecas
 compartidas necesarias para ejecutar aplicaciones C++.
 
-%description -n libstdc++ -l fr
+%description -n libstdc++4 -l fr
 Ceci est l'implémentation GNU des librairies C++ standard, ainsi que
 des outils GNU supplémentaires. Ce package comprend les librairies
 partagées nécessaires à l'exécution d'application C++.
 
-%description -n libstdc++ -l pl
+%description -n libstdc++4 -l pl
 Pakiet ten zawiera biblioteki bêd±ce implementacj± standardowych
 bibliotek C++. Znajduj± siê w nim biblioteki dynamiczne niezbêdne do
 uruchomienia aplikacji napisanych w C++.
 
-%description -n libstdc++ -l pt_BR
+%description -n libstdc++4 -l pt_BR
 Este pacote é uma implementação da biblioteca padrão C++ v3, um
 subconjunto do padrão ISO 14882.
 
-%description -n libstdc++ -l tr
+%description -n libstdc++4 -l tr
 Bu paket, standart C++ kitaplýklarýnýn GNU gerçeklemesidir ve C++
 uygulamalarýnýn koþturulmasý için gerekli kitaplýklarý içerir.
 
-%package -n libstdc++-devel
+%package -n libstdc++4-devel
 Summary:	Header files and documentation for C++ development
 Summary(de):	Header-Dateien zur Entwicklung mit C++
 Summary(es):	Ficheros de cabecera y documentación para desarrollo C++
@@ -230,46 +236,46 @@ Summary(pt_BR):	Arquivos de inclusão e bibliotecas para o desenvolvimento em C++
 Summary(tr):	C++ ile program geliþtirmek için gerekli dosyalar
 License:	GPL v2+ with free software exception
 Group:		Development/Libraries
-Requires:	%{name}-c++ = %{epoch}:%{version}-%{release}
-Requires:	libstdc++ = %{epoch}:%{version}-%{release}
+Requires:	%{name}-c++4 = %{epoch}:%{version}-%{release}
+Requires:	libstdc++4 = %{epoch}:%{version}-%{release}
 Requires:	glibc-devel
 Obsoletes:	libg++-devel
 Obsoletes:	libstdc++3-devel
 
-%description -n libstdc++-devel
+%description -n libstdc++4-devel
 This is the GNU implementation of the standard C++ libraries. This
 package includes the header files needed for C++ development and
 library documentation.
 
-%description -n libstdc++-devel -l es
+%description -n libstdc++4-devel -l es
 Este es el soporte de las bibliotecas padrón del lenguaje C++. Este
 paquete incluye los archivos de inclusión y bibliotecas necesarios
 para desarrollo de programas en lenguaje C++.
 
-%description -n libstdc++-devel -l pl
+%description -n libstdc++4-devel -l pl
 Pakiet ten zawiera biblioteki bêd±ce implementacj± standardowych
 bibliotek C++. Znajduj± siê w nim pliki nag³ówkowe wykorzystywane przy
 programowaniu w jêzyku C++ oraz dokumentacja biblioteki standardowej.
 
-%description -n libstdc++-devel -l pt_BR
+%description -n libstdc++4-devel -l pt_BR
 Este pacote inclui os arquivos de inclusão e bibliotecas necessárias
 para desenvolvimento de programas C++.
 
-%package -n libstdc++-static
+%package -n libstdc++4-static
 Summary:	Static C++ standard library
 Summary(es):	Biblioteca estándar estática de C++
 Summary(pl):	Statyczna biblioteka standardowa C++
 License:	GPL v2+ with free software exception
 Group:		Development/Libraries
-Requires:	libstdc++-devel = %{epoch}:%{version}-%{release}
+Requires:	libstdc++4-devel = %{epoch}:%{version}-%{release}
 
-%description -n libstdc++-static
+%description -n libstdc++4-static
 Static C++ standard library.
 
-%description -n libstdc++-static -l es
+%description -n libstdc++4-static -l es
 Biblioteca estándar estática de C++.
 
-%description -n libstdc++-static -l pl
+%description -n libstdc++4-static -l pl
 Statyczna biblioteka standardowa C++.
 
 %prep
@@ -501,12 +507,12 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libsupc++.la
 %{_mandir}/man1/g++4.1*
 
-%files -n libstdc++ -f libstdc++.lang
+%files -n libstdc++4
 %defattr(644,root,root,755)
 %doc libstdc++-v3/{ChangeLog,README}
 %attr(755,root,root) %{_libdir}/libstdc++.so.*.*.*
 
-%files -n libstdc++-devel
+%files -n libstdc++4-devel
 %defattr(644,root,root,755)
 %doc libstdc++-v3/docs/html
 %dir %{_includedir}/c++
@@ -515,7 +521,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libstdc++.la
 %attr(755,root,root) %{_libdir}/libstdc++.so
 
-%files -n libstdc++-static
+%files -n libstdc++4-static
 %defattr(644,root,root,755)
 %{_libdir}/libstdc++.a
 %endif
