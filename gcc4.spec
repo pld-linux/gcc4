@@ -341,7 +341,7 @@ TEXCONFIG=false \
 	--libexecdir=%{_libdir} \
 	--infodir=%{_infodir} \
 	--mandir=%{_mandir} \
-	--x-libraries=%{_libdir} \
+	--x-libraries=%{?_x_libraries}%{!?_x_libraries:%{_libdir}} \
 	--enable-shared \
 	--enable-threads=posix \
 	--enable-languages="c%{?with_cxx:,c++}" \
