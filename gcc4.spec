@@ -68,6 +68,7 @@ BuildRequires:	chrpath >= 0.10
 %{?with_tests:BuildRequires:	dejagnu}
 BuildRequires:	fileutils >= 4.0.41
 BuildRequires:	flex
+BuildRequires:	gcc
 BuildRequires:	gettext-devel
 BuildRequires:	glibc-devel >= 6:2.3
 BuildRequires:	gmp-devel
@@ -454,6 +455,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %post	-p /sbin/ldconfig -n libgcc4
 %postun	-p /sbin/ldconfig -n libgcc4
+
+%post	-p /sbin/ldconfig -n libstdc++4
+%postun	-p /sbin/ldconfig -n libstdc++4
 
 %files
 %defattr(644,root,root,755)
