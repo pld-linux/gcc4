@@ -4,6 +4,11 @@
 #   %{_libdir}/libsupc++.la
 # - libgcc4 collides with libgcc:
 #   /%{_lib}/libgcc_s.so.1
+# - ppc fail:
+# ../../gcc/crtstuff.c:1: error: -msecure-plt not supported by your assembler
+# - sparc fail:
+#  build/genmodes.o build/errors.o ../build-sparc-pld-linux/libiberty/libiberty.a
+#  stage1/libgcc_s.so: undefined reference to `_Q_sub'
 #
 # Conditional build:
 %bcond_with	profiling	# build with profiling
