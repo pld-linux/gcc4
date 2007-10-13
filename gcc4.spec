@@ -4,13 +4,6 @@
 #   %{_libdir}/libsupc++.la
 # - libgcc4 collides with libgcc:
 #   /%{_lib}/libgcc_s.so.1
-# - ppc fail:
-#   ../../gcc/crtstuff.c:1: error: -msecure-plt not supported by your assembler
-#  i.e. too old binutils
-# - sparc fail:
-#   build/genmodes.o build/errors.o ../build-sparc-pld-linux/libiberty/libiberty.a
-#   stage1/libgcc_s.so: undefined reference to `_Q_sub'
-#  probably because --with-long-double-128 requires glibc supporting it (2.4 or 2.5)
 #
 # Conditional build:
 %bcond_with	profiling	# build with profiling
@@ -29,7 +22,7 @@ Summary(pl):	Kolekcja kompilatorów GNU: kompilator C i pliki wspó³dzielone
 Summary(pt_BR):	Coleção dos compiladores GNU: o compilador C e arquivos compartilhados
 Name:		%{sname}4
 Version:	4.1.2
-Release:	1
+Release:	2
 Epoch:		5
 License:	GPL v2+
 Group:		Development/Languages
@@ -366,7 +359,6 @@ TEXCONFIG=false \
 	--with-system-libunwind \
 %endif
 	--without-x \
-	--with-long-double-128 \
 %ifarch ppc ppc64
 	--enable-secureplt \
 %endif
