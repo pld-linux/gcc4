@@ -22,7 +22,7 @@ Summary(pl):	Kolekcja kompilatorów GNU: kompilator C i pliki wspó³dzielone
 Summary(pt_BR):	Coleção dos compiladores GNU: o compilador C e arquivos compartilhados
 Name:		%{sname}4
 Version:	4.1.2
-Release:	3
+Release:	4
 Epoch:		5
 License:	GPL v2+
 Group:		Development/Languages
@@ -42,6 +42,7 @@ Patch10:	%{name}-pr7776.patch
 Patch11:	%{name}-pr19606.patch
 Patch12:	%{name}-pr24879.patch
 
+Patch16:    gcc-4.1-pr29826.patch
 Patch17:	%{name}-pr19505.patch
 Patch18:	%{name}-pr24419.patch
 Patch19:	%{name}-pr24669.patch
@@ -302,6 +303,9 @@ Statyczna biblioteka standardowa C++.
 %patch11 -p0
 %patch12 -p0
 
+cd gcc
+%patch16 -p0
+cd -
 %patch17 -p1
 %patch18 -p1
 %patch19 -p1
