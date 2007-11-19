@@ -22,7 +22,7 @@ Summary(pl):	Kolekcja kompilatorów GNU: kompilator C i pliki wspó³dzielone
 Summary(pt_BR):	Coleção dos compiladores GNU: o compilador C e arquivos compartilhados
 Name:		%{sname}4
 Version:	4.1.2
-Release:	4
+Release:	5
 Epoch:		5
 License:	GPL v2+
 Group:		Development/Languages
