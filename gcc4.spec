@@ -2,8 +2,6 @@
 # - gcc4-c++ collides with gcc-c++:
 #   %{_libdir}/libsupc++.a
 #   %{_libdir}/libsupc++.la
-# - libgcc4 collides with libgcc:
-#   /%{_lib}/libgcc_s.so.1
 #
 # Conditional build:
 %bcond_with	profiling	# build with profiling
@@ -22,7 +20,7 @@ Summary(pl):	Kolekcja kompilatorów GNU: kompilator C i pliki wspó³dzielone
 Summary(pt_BR):	Coleção dos compiladores GNU: o compilador C e arquivos compartilhados
 Name:		%{sname}4
 Version:	4.1.2
-Release:	5
+Release:	6
 Epoch:		5
 License:	GPL v2+
 Group:		Development/Languages
@@ -42,7 +40,7 @@ Patch10:	%{name}-pr7776.patch
 Patch11:	%{name}-pr19606.patch
 Patch12:	%{name}-pr24879.patch
 
-Patch16:    gcc-4.1-pr29826.patch
+Patch16:	gcc-4.1-pr29826.patch
 Patch17:	%{name}-pr19505.patch
 Patch18:	%{name}-pr24419.patch
 Patch19:	%{name}-pr24669.patch
@@ -408,9 +406,12 @@ ln -sf %{_bindir}/cpp4 $RPM_BUILD_ROOT/lib/cpp4
 ln -sf gcc4 $RPM_BUILD_ROOT%{_bindir}/cc4
 echo ".so gcc4.1" > $RPM_BUILD_ROOT%{_mandir}/man1/cc4.1
 
-libssp=$(cd $RPM_BUILD_ROOT%{_libdir}; echo libssp.so.*.*.*)
-mv $RPM_BUILD_ROOT{%{_libdir}/$libssp,%{_slibdir}}
-ln -sf %{_slibdir}/$libssp $RPM_BUILD_ROOT%{_libdir}/libssp.so
+mv $RPM_BUILD_ROOT{%{_libdir}/libssp.so.*,%{_slibdir}}
+ln -sf %{_slibdir}/$(basename $RPM_BUILD_ROOT%{_slibdir}/libssp.so.*.*.*) $RPM_BUILD_ROOT%{_libdir}/libssp.so
+chmod +x $RPM_BUILD_ROOT%{_slibdir}/libgcc_s.so.1
+# rename so we could be installed with system gcc.spec
+mv $RPM_BUILD_ROOT%{_slibdir}/libgcc_s.so.{1,%{version}}
+ln -s libgcc_s.so.%{version} $RPM_BUILD_ROOT%{_slibdir}/libgcc_s.so.1
 
 cd ..
 
@@ -433,14 +434,40 @@ rm -rf $gccdir/install-tools
 cat cpplib.lang >> gcc.lang
 
 %if %{with cxx}
-# only de is installed and that is empty too
-#%%find_lang libstdc++
+%find_lang libstdc\+\+
 install libstdc++-v3/include/stdc++.h $RPM_BUILD_ROOT%{_includedir}
 %endif
 
 # cvs snap doesn't contain (release does) below files,
 # so let's create dummy entries to satisfy %%files.
 [ ! -f NEWS ] && touch NEWS
+
+# not packaged anywhere
+rm -f $RPM_BUILD_ROOT%{_infodir}/dir
+rm -f $RPM_BUILD_ROOT%{_infodir}/cpp.info
+rm -f $RPM_BUILD_ROOT%{_infodir}/cppinternals.info
+rm -f $RPM_BUILD_ROOT%{_infodir}/gcc.info
+rm -f $RPM_BUILD_ROOT%{_infodir}/gccinstall.info
+rm -f $RPM_BUILD_ROOT%{_infodir}/gccint.info
+rm -f $RPM_BUILD_ROOT%{_includedir}/mf-runtime.h
+rm -f $RPM_BUILD_ROOT%{_libdir}/libiberty.a
+rm -f $RPM_BUILD_ROOT%{_mandir}/man7/fsf-funding.7
+rm -f $RPM_BUILD_ROOT%{_mandir}/man7/gfdl.7
+rm -f $RPM_BUILD_ROOT%{_mandir}/man7/gpl.7
+# don't build these then?
+rm -f $RPM_BUILD_ROOT%{_libdir}/libmudflap.a
+rm -f $RPM_BUILD_ROOT%{_libdir}/libmudflap.la
+rm -f $RPM_BUILD_ROOT%{_libdir}/libmudflap.so
+rm -f $RPM_BUILD_ROOT%{_libdir}/libmudflap.so.0
+rm -f $RPM_BUILD_ROOT%{_libdir}/libmudflap.so.0.0.0
+rm -f $RPM_BUILD_ROOT%{_libdir}/libmudflapth.a
+rm -f $RPM_BUILD_ROOT%{_libdir}/libmudflapth.la
+rm -f $RPM_BUILD_ROOT%{_libdir}/libmudflapth.so
+rm -f $RPM_BUILD_ROOT%{_libdir}/libmudflapth.so.0
+rm -f $RPM_BUILD_ROOT%{_libdir}/libmudflapth.so.0.0.0
+
+# remove empty language catalogs (= 1 message only)
+find $RPM_BUILD_ROOT%{_datadir}/locale -type f -name '*.mo' | xargs file | egrep ', 1 messages$' | cut -d: -f1 | xargs rm -vf
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -457,7 +484,7 @@ rm -rf $RPM_BUILD_ROOT
 %post	-p /sbin/ldconfig -n libstdc++4
 %postun	-p /sbin/ldconfig -n libstdc++4
 
-%files
+%files -f gcc.lang
 %defattr(644,root,root,755)
 %doc ChangeLog.general MAINTAINERS NEWS
 # bugs.html faq.html
@@ -481,8 +508,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/gcov4.1*
 
 %attr(755,root,root) /lib/cpp4
-
-%attr(755,root,root) %{_slibdir}/lib*.so
+%attr(755,root,root) %{_slibdir}/libgcc_s.so
 %{_libdir}/libssp.a
 %{_libdir}/libssp.la
 %attr(755,root,root) %{_libdir}/libssp.so
@@ -501,7 +527,10 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n libgcc4
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_slibdir}/lib*.so.*
+%attr(755,root,root) %{_slibdir}/libssp.so.*.*.*
+%attr(755,root,root) %ghost %{_slibdir}/libssp.so.0
+%attr(755,root,root) %{_slibdir}/libgcc_s.so.%{version}
+%attr(755,root,root) %ghost %{_slibdir}/libgcc_s.so.1
 
 %if %{with cxx}
 %files c++
@@ -516,10 +545,11 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libsupc++.la
 %{_mandir}/man1/g++4.1*
 
-%files -n libstdc++4
+%files -n libstdc++4 -f libstdc++.lang
 %defattr(644,root,root,755)
 %doc libstdc++-v3/{ChangeLog,README}
 %attr(755,root,root) %{_libdir}/libstdc++.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libstdc++.so.6
 
 %files -n libstdc++4-devel
 %defattr(644,root,root,755)
