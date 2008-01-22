@@ -20,7 +20,7 @@ Summary(pl):	Kolekcja kompilatorów GNU: kompilator C i pliki wspó³dzielone
 Summary(pt_BR):	Coleção dos compiladores GNU: o compilador C e arquivos compartilhados
 Name:		%{sname}4
 Version:	4.1.2
-Release:	6
+Release:	7
 Epoch:		5
 License:	GPL v2+
 Group:		Development/Languages
@@ -530,7 +530,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_slibdir}/libssp.so.*.*.*
 %attr(755,root,root) %ghost %{_slibdir}/libssp.so.0
 %attr(755,root,root) %{_slibdir}/libgcc_s.so.%{version}
-%attr(755,root,root) %ghost %{_slibdir}/libgcc_s.so.1
 
 %if %{with cxx}
 %files c++
