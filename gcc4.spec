@@ -20,7 +20,7 @@ Summary(pl):	Kolekcja kompilatorów GNU: kompilator C i pliki wspó³dzielone
 Summary(pt_BR):	Coleção dos compiladores GNU: o compilador C e arquivos compartilhados
 Name:		%{sname}4
 Version:	4.1.2
-Release:	7
+Release:	8
 Epoch:		5
 License:	GPL v2+
 Group:		Development/Languages
@@ -79,7 +79,6 @@ BuildRequires:	zlib-devel
 # http://sources.redhat.com/ml/binutils/2005-01/msg00288.html
 Requires:	binutils >= 2:2.16.90.0.1-0.3
 Requires:	libgcc4 = %{epoch}:%{version}-%{release}
-Provides:	cpp = %{epoch}:%{version}-%{release}
 Provides:	cpp4 = %{epoch}:%{version}-%{release}
 Provides:	gcc = %{epoch}:%{version}-%{release}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
