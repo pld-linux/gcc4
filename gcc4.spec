@@ -20,7 +20,7 @@ Summary(pl):	Kolekcja kompilatorów GNU: kompilator C i pliki wspó³dzielone
 Summary(pt_BR):	Coleção dos compiladores GNU: o compilador C e arquivos compartilhados
 Name:		%{sname}4
 Version:	4.1.2
-Release:	8
+Release:	9
 Epoch:		5
 License:	GPL v2+
 Group:		Development/Languages
@@ -428,12 +428,18 @@ cp $gccdir/install-tools/include/*.h $gccdir/include
 # but we don't want anything more from install-tools
 rm -rf $gccdir/install-tools
 
-%find_lang gcc
-%find_lang cpplib
-cat cpplib.lang >> gcc.lang
+for a in $RPM_BUILD_ROOT%{_datadir}/locale/*/LC_MESSAGES/*.mo; do
+	d=${a%/*} # dirname
+	n=${a##*/} # basename
+	mv $a $d/${n%.mo}4.mo
+done
+
+%find_lang gcc4
+%find_lang cpplib4
+cat cpplib4.lang >> gcc4.lang
 
 %if %{with cxx}
-%find_lang libstdc\+\+
+%find_lang libstdc\+\+4
 install libstdc++-v3/include/stdc++.h $RPM_BUILD_ROOT%{_includedir}
 %endif
 
@@ -483,7 +489,7 @@ rm -rf $RPM_BUILD_ROOT
 %post	-p /sbin/ldconfig -n libstdc++4
 %postun	-p /sbin/ldconfig -n libstdc++4
 
-%files -f gcc.lang
+%files -f gcc4.lang
 %defattr(644,root,root,755)
 %doc ChangeLog.general MAINTAINERS NEWS
 # bugs.html faq.html
@@ -543,7 +549,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libsupc++.la
 %{_mandir}/man1/g++4.1*
 
-%files -n libstdc++4 -f libstdc++.lang
+%files -n libstdc++4 -f libstdc++4.lang
 %defattr(644,root,root,755)
 %doc libstdc++-v3/{ChangeLog,README}
 %attr(755,root,root) %{_libdir}/libstdc++.so.*.*.*
