@@ -20,7 +20,7 @@ Summary(pl.UTF-8):	Kolekcja kompilatorów GNU: kompilator C i pliki współdziel
 Summary(pt_BR.UTF-8):	Coleção dos compiladores GNU: o compilador C e arquivos compartilhados
 Name:		%{sname}4
 Version:	4.1.2
-Release:	9
+Release:	10
 Epoch:		5
 License:	GPL v2+
 Group:		Development/Languages
@@ -146,6 +146,7 @@ Requires:	%{name} = %{epoch}:%{version}-%{release}
 Provides:	%{name}-c++ = %{epoch}:%{version}-%{release}
 Obsoletes:	egcc-c++
 Obsoletes:	egcs-c++
+Obsoletes:	gcc-c++ < %{epoch}:%{version}-%{release}
 
 %description c++
 This package adds C++ support to the GNU Compiler Collection. It
@@ -244,6 +245,7 @@ Requires:	glibc-devel
 Requires:	libstdc++4 = %{epoch}:%{version}-%{release}
 Provides:	libstdc++-devel = %{epoch}:%{version}-%{release}
 Obsoletes:	libg++-devel
+Obsoletes:	libstdc++-devel < %{epoch}:%{version}-%{release}
 Obsoletes:	libstdc++3-devel
 
 %description -n libstdc++4-devel
@@ -472,16 +474,16 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/libmudflapth.so.0
 rm -f $RPM_BUILD_ROOT%{_libdir}/libmudflapth.so.0.0.0
 
 # remove empty language catalogs (= 1 message only)
-find $RPM_BUILD_ROOT%{_datadir}/locale -type f -name '*.mo' | xargs file | egrep ', 1 messages$' | cut -d: -f1 | xargs rm -vf
+find $RPM_BUILD_ROOT%{_datadir}/locale -type f -name '*.mo' | xargs file | grep -E ', 1 messages$' | cut -d: -f1 | xargs rm -vf
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post
-[ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>&1
+%post	-p /sbin/postshell
+-/usr/sbin/fix-info-dir -c %{_infodir}
 
-%postun
-[ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>&1
+%postun	-p /sbin/postshell
+-/usr/sbin/fix-info-dir -c %{_infodir}
 
 %post	-p /sbin/ldconfig -n libgcc4
 %postun	-p /sbin/ldconfig -n libgcc4
