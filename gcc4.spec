@@ -85,6 +85,10 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_slibdir	/%{_lib}
 
+# TODO: correct these or document
+# libstdc++.so.6.0.8 symbol: ___tls_get_addr
+%define		skip_post_check_so	libstdc\\+\\+.so.6.0.*
+
 %description
 A compiler aimed at integrating all the optimizations and features
 necessary for a high-performance and stable development environment.
