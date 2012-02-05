@@ -4,6 +4,7 @@
 #   %{_libdir}/libsupc++.la
 #
 # Conditional build:
+%bcond_without	ada		# build without ADA support
 %bcond_with	profiling	# build with profiling
 %bcond_without	bootstrap	# omit 3-stage bootstrap
 %bcond_without	cxx		# build without C++ support
@@ -30,6 +31,9 @@ Source1:	%{name}-optimize-la.pl
 Patch0:		%{name}-info.patch
 Patch1:		%{name}-nolocalefiles.patch
 Patch2:		%{name}-nodebug.patch
+Patch3:		%{name}-ada-link.patch
+Patch4:		%{name}-sparc64-ada_fix.patch
+Patch5:		%{name}-alpha-ada_fix.patch
 # -fvisibility fixes...
 Patch6:		%{name}-pr19664_gnu_internal.patch
 Patch7:		%{name}-pr19664_libstdc++.patch
@@ -55,6 +59,8 @@ Patch26:	%{name}-ppc64-m32-m64-multilib-only.patch
 Patch30:	%{name}-ldbl-default-libstdc++.patch
 Patch31:	%{name}-ldbl-default.patch
 
+# Needed to bootstrap with gcc 4.2
+Patch40:	%{name}-ada.patch
 URL:		http://gcc.gnu.org/
 BuildRequires:	autoconf
 %{?with_tests:BuildRequires:	autogen}
@@ -66,6 +72,10 @@ BuildRequires:	chrpath >= 0.10
 %{?with_tests:BuildRequires:	dejagnu}
 BuildRequires:	fileutils >= 4.0.41
 BuildRequires:	flex
+%if %{with ada}
+BuildRequires:	gcc(ada)
+BuildRequires:	gcc-ada
+%endif
 BuildRequires:	gcc
 BuildRequires:	gettext-devel
 BuildRequires:	glibc-devel >= 6:2.3
@@ -74,6 +84,7 @@ BuildRequires:	perl-base
 BuildRequires:	rpmbuild(macros) >= 1.211
 BuildRequires:	texinfo >= 4.1
 BuildRequires:	zlib-devel
+%{?with_ada:Provides:	gcc(ada)}
 # AS_NEEDED directive for dynamic linker
 # http://sources.redhat.com/ml/glibc-cvs/2005-q1/msg00614.html
 # http://sources.redhat.com/ml/binutils/2005-01/msg00288.html
@@ -139,6 +150,63 @@ Biblioteka dynamiczna gcc.
 
 %description -n libgcc4 -l pt_BR.UTF-8
 Biblioteca runtime para o GCC.
+
+%package ada
+Summary:	Ada support for gcc
+Summary(es.UTF-8):	Soporte de Ada para gcc
+Summary(pl.UTF-8):	Obsługa Ady do gcc
+Group:		Development/Languages
+Requires:	%{name} = %{epoch}:%{version}-%{release}
+Requires:	libgnat = %{epoch}:%{version}-%{release}
+Obsoletes:	gcc-ada < %{epoch}:%{version}-%{release}
+Obsoletes:	gcc-gnat
+Obsoletes:	gnat-devel
+
+%description ada
+This package adds experimental support for compiling Ada programs.
+
+%description ada -l es.UTF-8
+Este paquete añade soporte experimental para compilar programas en
+Ada.
+
+%description ada -l pl.UTF-8
+Ten pakiet dodaje eksperymentalne wsparcie dla kompilacji programów w
+Adzie.
+
+%package -n libgnat
+Summary:	Ada standard libraries
+Summary(es.UTF-8):	Bibliotecas estándares de Ada
+Summary(pl.UTF-8):	Biblioteki standardowe dla Ady
+License:	GPL v2+ with linking exception
+Group:		Libraries
+Obsoletes:	gnat
+Obsoletes:	libgnat1
+
+%description -n libgnat
+This package contains shared libraries needed to run programs written
+in Ada.
+
+%description -n libgnat -l es.UTF-8
+Este paquete contiene las bibliotecas compartidas necesarias para
+ejecutar programas escritos en Ada.
+
+%description -n libgnat -l pl.UTF-8
+Ten pakiet zawiera biblioteki potrzebne do uruchamiania programów
+napisanych w Adzie.
+
+%package -n libgnat-static
+Summary:	Static Ada standard libraries
+Summary(pl.UTF-8):	Statyczne biblioteki standardowe dla Ady
+License:	GPL v2+ with linking exception
+Group:		Development/Libraries
+Obsoletes:	gnat-static
+
+%description -n libgnat-static
+This package contains static libraries for programs written in Ada.
+
+%description -n libgnat-static -l pl.UTF-8
+Ten pakiet zawiera biblioteki statyczne dla programów napisanych w
+Adzie.
 
 %package c++
 Summary:	C++ support for gcc
@@ -295,6 +363,9 @@ Statyczna biblioteka standardowa C++.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
+%patch4 -p1
+%patch5 -p1
 
 # -fvisbility fixes...
 %patch6 -p1
@@ -321,6 +392,8 @@ cd -
 
 %patch30 -p0
 %patch31 -p0
+
+%patch40 -p1
 
 # because we distribute modified version of gcc...
 sed -i 's:#define VERSUFFIX.*:#define VERSUFFIX " (PLD-Linux)":' gcc/version.c
@@ -350,7 +423,7 @@ TEXCONFIG=false \
 	--x-libraries=%{?_x_libraries}%{!?_x_libraries:%{_libdir}} \
 	--enable-shared \
 	--enable-threads=posix \
-	--enable-languages="c%{?with_cxx:,c++}" \
+	--enable-languages="c%{?with_cxx:,c++}%{?with_ada:,ada}" \
 	--enable-c99 \
 	--enable-long-long \
 	--enable-nls \
@@ -417,6 +490,18 @@ chmod +x $RPM_BUILD_ROOT%{_slibdir}/libgcc_s.so.1
 # rename so we could be installed with system gcc.spec
 mv $RPM_BUILD_ROOT%{_slibdir}/libgcc_s.so.{1,%{version}}
 ln -s libgcc_s.so.%{version} $RPM_BUILD_ROOT%{_slibdir}/libgcc_s.so.1
+
+%if %{with ada}
+# move ada shared libraries to proper place...
+mv -f	$RPM_BUILD_ROOT%{_libdir}/gcc/*/*/adalib/*.so.1 \
+	$RPM_BUILD_ROOT%{_libdir}
+# check if symlink to be made is valid
+test -f	$RPM_BUILD_ROOT%{_libdir}/libgnat-4.1.so.1
+ln -sf	libgnat-4.1.so.1 $RPM_BUILD_ROOT%{_libdir}/libgnat-4.1.so
+ln -sf	libgnarl-4.1.so.1 $RPM_BUILD_ROOT%{_libdir}/libgnarl-4.1.so
+ln -sf	libgnat-4.1.so $RPM_BUILD_ROOT%{_libdir}/libgnat.so
+ln -sf	libgnarl-4.1.so $RPM_BUILD_ROOT%{_libdir}/libgnarl.so
+%endif
 
 cd ..
 
@@ -495,6 +580,12 @@ rm -rf $RPM_BUILD_ROOT
 %post	-p /sbin/ldconfig -n libstdc++4
 %postun	-p /sbin/ldconfig -n libstdc++4
 
+%post ada
+[ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>&1
+
+%postun ada
+[ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir -c %{_infodir} >/dev/null 2>&1
+
 %files -f gcc4.lang
 %defattr(644,root,root,755)
 %doc ChangeLog.general MAINTAINERS NEWS
@@ -541,6 +632,36 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_slibdir}/libssp.so.*.*.*
 %attr(755,root,root) %ghost %{_slibdir}/libssp.so.0
 %attr(755,root,root) %{_slibdir}/libgcc_s.so.%{version}
+
+%if %{with ada}
+%files ada
+%defattr(644,root,root,755)
+%doc gcc/ada/ChangeLog
+%attr(755,root,root) %{_bindir}/gnat*
+%attr(755,root,root) %{_bindir}/gpr*
+%attr(755,root,root) %{_libdir}/libgnarl*.so
+%attr(755,root,root) %{_libdir}/libgnat*.so
+%attr(755,root,root) %{_libdir}/gcc/*/*/gnat1
+%{_libdir}/gcc/*/*/adainclude
+%dir %{_libdir}/gcc/*/*/adalib
+%{_libdir}/gcc/*/*/adalib/*.ali
+%{_libdir}/gcc/*/*/adalib/g-trasym.o
+%{_libdir}/gcc/*/*/adalib/libgccprefix.a
+%ifarch %{ix86} %{x8664}
+%{_libdir}/gcc/*/*/adalib/libgmem.a
+%endif
+%{_infodir}/gnat*
+
+%files -n libgnat
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/libgnarl*.so.1
+%attr(755,root,root) %{_libdir}/libgnat*.so.1
+
+%files -n libgnat-static
+%defattr(644,root,root,755)
+%{_libdir}/gcc/*/*/adalib/libgnarl.a
+%{_libdir}/gcc/*/*/adalib/libgnat.a
+%endif
 
 %if %{with cxx}
 %files c++
